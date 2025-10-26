@@ -2,6 +2,10 @@
 local o = vim.opt
 
 o.number = False
+o.expandtab = True
+o.shiftwidth = 2     -- auto-indent size
+o.tabstop = 2        -- visual width of a <Tab> in files
+o.softtabstop = 2    -- how many spaces <Tab> inserts in insert-mode
 o.relativenumber = False
 o.signcolumn = "yes"
 o.scrolloff = 5
