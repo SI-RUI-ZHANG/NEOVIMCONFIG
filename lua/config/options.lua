@@ -2,7 +2,7 @@
 local o = vim.opt
 
 o.number = false
-o.expandtab = True
+o.expandtab = true
 o.shiftwidth = 2     -- auto-indent size
 o.tabstop = 2        -- visual width of a <Tab> in files
 o.softtabstop = 2    -- how many spaces <Tab> inserts in insert-mode
