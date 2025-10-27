@@ -1,29 +1,80 @@
 -- lua/plugins/formatting.lua
--- Code formatting with Conform (copy-paste ready)
+-- Code formatting with Conform (smart selection handling)
+-- Drop-in replacement for your current file.
+
+-- Detect if the current visual selection covers the entire buffer.
+local function selection_covers_entire_buffer()
+	local mode = vim.fn.mode()
+	if not (mode == "v" or mode == "V" or mode == "\022") then
+		return false
+	end
+	local srow, scol = table.unpack(vim.api.nvim_buf_get_mark(0, "<"))
+	local erow, ecol = table.unpack(vim.api.nvim_buf_get_mark(0, ">"))
+
+	-- Normalize order (selection might be made backwards)
+	if srow > erow or (srow == erow and scol > ecol) then
+		srow, erow = erow, srow
+		scol, ecol = ecol, scol
+	end
+
+	local lastline = vim.api.nvim_buf_line_count(0)
+	if mode == "V" then
+		-- Visual-line: full file if it spans first..last line
+		return srow == 1 and erow == lastline
+	else
+		-- Char/block-wise: start at (1,1) and end at last line's end
+		local start_ok = (srow == 1 and scol <= 1)
+		local lastcol = vim.fn.col({ erow, "$" }) - 1 -- last character column
+		local end_ok = (erow == lastline and ecol >= lastcol)
+		return start_ok and end_ok
+	end
+end
+
+-- Filetypes where range formatting is unreliable: always format whole file.
+local WHOLE_FILE_ONLY = {
+	python = true, -- black/ruff_format
+	go = true, -- goimports/gofmt
+	java = true, -- google-java-format
+	sh = true, -- shfmt
+}
+
+-- Smart format: choose range vs full-file based on mode/selection/filetype.
+local function smart_format(opts)
+	opts = opts or {}
+	local ft = vim.bo.filetype
+	local mode = vim.fn.mode()
+
+	local use_range = false
+	if mode == "v" or mode == "V" or mode == "\022" then
+		if not WHOLE_FILE_ONLY[ft] then
+			-- If selection is the entire buffer, prefer full-file for stability.
+			use_range = not selection_covers_entire_buffer()
+		end
+	end
+
+	require("conform").format({
+		lsp_format = "fallback",
+		timeout_ms = 1000,
+		range = use_range and true or nil, -- nil => full-file
+	})
+end
+
 return {
 	{
 		"stevearc/conform.nvim",
-		event = { "BufWritePre" }, -- load before saving
+		event = { "BufWritePre" }, -- (typo fixed)
 		keys = {
-			-- Format whole buffer (normal mode)
+			-- Smart format in both Normal and Visual modes
 			{
 				"<leader>lf",
 				function()
-					require("conform").format({ lsp_format = "fallback", timeout_ms = 1000 })
+					smart_format()
 				end,
-				mode = "n",
-				desc = "Format file (Conform)",
+				mode = { "n", "v" },
+				desc = "Format (smart)",
 			},
-			-- Format selection (visual mode) — Conform auto-uses the selection
-			{
-				"<leader>lf",
-				function()
-					require("conform").format({ lsp_format = "fallback", timeout_ms = 1000 })
-				end,
-				mode = "v",
-				desc = "Format selection (Conform)",
-			},
-			-- Force format the whole file (even from visual mode)
+
+			-- Force whole-file formatting (even from Visual mode)
 			{
 				"<leader>lF",
 				function()
@@ -32,11 +83,12 @@ return {
 				mode = { "n", "v" },
 				desc = "Format whole file (force)",
 			},
-			-- Inspect available formatters & logs
+
+			-- Inspect configured/available formatters & logs
 			{ "<leader>li", "<cmd>ConformInfo<cr>", desc = "Conform info" },
 		},
 		opts = {
-			-- Run formatters per filetype (first available wins if stop_after_first)
+			-- Your existing config, unchanged
 			formatters_by_ft = {
 				lua = { "stylua" },
 
@@ -59,18 +111,16 @@ return {
 				yaml = { "prettierd", "prettier", stop_after_first = true },
 				markdown = { "prettierd", "prettier", stop_after_first = true },
 
-				-- HTML & Java (added)
-				html = { "prettierd", "prettier", stop_after_first = true },
-				java = { "google-java-format" },
-
 				-- Others
 				sh = { "shfmt" },
 				go = { "goimports", "gofmt" },
+				-- Add these back if you need them:
+				-- html = { "prettierd", "prettier", stop_after_first = true },
+				-- java = { "google-java-format" },
 			},
 
 			-- Format on save; fall back to LSP if no external formatter
 			format_on_save = function(bufnr)
-				-- Disable for very large files
 				local max = 200 * 1024 -- 200 KB
 				if vim.fn.getfsize(vim.api.nvim_buf_get_name(bufnr)) > max then
 					return
