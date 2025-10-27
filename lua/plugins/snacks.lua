@@ -36,7 +36,7 @@ return {
 	keys = {
 		-- Top Pickers & Explorer
 		{
-			"<leader>sf",
+			"<leader>ff",
 			function()
 				Snacks.picker.smart()
 			end,
@@ -79,11 +79,11 @@ return {
 		},
 		-- find
 		{
-			"<leader>fb",
+			"<leader>F",
 			function()
-				Snacks.picker.buffers()
+				Snacks.picker.files()
 			end,
-			desc = "Buffers",
+			desc = "Find Files (all)",
 		},
 		{
 			"<leader>fc",
@@ -91,13 +91,6 @@ return {
 				Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
 			end,
 			desc = "Find Config File",
-		},
-		{
-			"<leader>ff",
-			function()
-				Snacks.picker.files()
-			end,
-			desc = "Find Files",
 		},
 		{
 			"<leader>fg",
@@ -179,13 +172,6 @@ return {
 			desc = "Grep Open Buffers",
 		},
 		{
-			"<leader>sg",
-			function()
-				Snacks.picker.grep()
-			end,
-			desc = "Grep",
-		},
-		{
 			"<leader>sw",
 			function()
 				Snacks.picker.grep_word()
@@ -223,32 +209,11 @@ return {
 			desc = "Buffer Lines",
 		},
 		{
-			"<leader>sc",
-			function()
-				Snacks.picker.command_history()
-			end,
-			desc = "Command History",
-		},
-		{
 			"<leader>sC",
 			function()
 				Snacks.picker.commands()
 			end,
 			desc = "Commands",
-		},
-		{
-			"<leader>sd",
-			function()
-				Snacks.picker.diagnostics()
-			end,
-			desc = "Diagnostics",
-		},
-		{
-			"<leader>sD",
-			function()
-				Snacks.picker.diagnostics_buffer()
-			end,
-			desc = "Buffer Diagnostics",
 		},
 		{
 			"<leader>sh",
@@ -421,7 +386,7 @@ return {
 			desc = "which_key_ignore",
 		},
 		{
-			"]]",
+			")",
 			function()
 				Snacks.words.jump(vim.v.count1)
 			end,
@@ -429,7 +394,7 @@ return {
 			mode = { "n", "t" },
 		},
 		{
-			"[[",
+			"(",
 			function()
 				Snacks.words.jump(-vim.v.count1)
 			end,
