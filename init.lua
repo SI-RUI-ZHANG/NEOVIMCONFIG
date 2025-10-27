@@ -10,5 +10,4 @@ require("config.lazy")
 -- 3) Core editor settings and your global keymaps
 require("config.options")
 require("config.keymaps")
-
-
+require("config.autoread")
