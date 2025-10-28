@@ -1,6 +1,4 @@
--- lua/plugins/formatting.lua
--- Code formatting with Conform (smart selection handling)
--- Drop-in replacement for your current file.
+-- Conform-based code formatting
 
 -- Detect if the current visual selection covers the entire buffer.
 local function selection_covers_entire_buffer()
@@ -62,7 +60,7 @@ end
 return {
 	{
 		"stevearc/conform.nvim",
-		event = { "BufWritePre" }, -- (typo fixed)
+    event = { "BufWritePre" },
 		keys = {
 			-- Smart format in both Normal and Visual modes
 			{
@@ -88,11 +86,10 @@ return {
 			{ "<leader>li", "<cmd>ConformInfo<cr>", desc = "Conform info" },
 		},
 		opts = {
-			-- Your existing config, unchanged
-			formatters_by_ft = {
+      formatters_by_ft = {
 				lua = { "stylua" },
 
-				-- Prefer ruff if available, otherwise isort+black
+        -- Prefer ruff if available, otherwise isort+black
 				python = function(bufnr)
 					local c = require("conform")
 					if c.get_formatter_info("ruff_format", bufnr).available then
@@ -102,7 +99,7 @@ return {
 					end
 				end,
 
-				-- JS/TS & friends
+        -- JS/TS & friends
 				javascript = { "prettierd", "prettier", stop_after_first = true },
 				javascriptreact = { "prettierd", "prettier", stop_after_first = true },
 				typescript = { "prettierd", "prettier", stop_after_first = true },
@@ -111,13 +108,10 @@ return {
 				yaml = { "prettierd", "prettier", stop_after_first = true },
 				markdown = { "prettierd", "prettier", stop_after_first = true },
 
-				-- Others
-				sh = { "shfmt" },
-				go = { "goimports", "gofmt" },
-				-- Add these back if you need them:
-				-- html = { "prettierd", "prettier", stop_after_first = true },
-				-- java = { "google-java-format" },
-			},
+        -- Others
+        sh = { "shfmt" },
+        go = { "goimports", "gofmt" },
+      },
 
 			-- Format on save; fall back to LSP if no external formatter
 			format_on_save = function(bufnr)

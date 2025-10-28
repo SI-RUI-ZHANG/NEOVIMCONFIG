@@ -1,14 +1,11 @@
--- lua/plugins/lsp.lua
 return {
-	-- Mason (external tools/LSPs)
 	{ "mason-org/mason.nvim", opts = {} },
 
-	-- Bridge: installs + (by default) enables LSP servers on 0.11+
 	{
 		"mason-org/mason-lspconfig.nvim",
 		dependencies = {
 			"mason-org/mason.nvim",
-			"neovim/nvim-lspconfig", -- provides server presets in runtimepath/lsp/
+			"neovim/nvim-lspconfig",
 		},
 		opts = {
 			ensure_installed = {
@@ -24,12 +21,11 @@ return {
 				"clangd",
 				"rust_analyzer",
 			},
-			automatic_enable = true, -- mason-lspconfig v2 will call vim.lsp.enable()
+			automatic_enable = true,
 		},
 		config = function(_, opts)
 			require("mason-lspconfig").setup(opts)
 
-			-- Capabilities from your completion engine (works with nvim-cmp or blink.cmp)
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			local ok_cmp, cmp_lsp = pcall(require, "cmp_nvim_lsp")
 			if ok_cmp then
@@ -44,10 +40,9 @@ return {
 			local function conf(server, cfg)
 				cfg = cfg or {}
 				cfg.capabilities = vim.tbl_deep_extend("force", {}, capabilities, cfg.capabilities or {})
-				vim.lsp.config(server, cfg) -- new API (0.11+)
+				vim.lsp.config(server, cfg)
 			end
 
-			-- Only override servers you want to tweak; others use upstream defaults.
 			conf("lua_ls", {
 				settings = {
 					Lua = {
@@ -56,12 +51,11 @@ return {
 					},
 				},
 			})
-			conf("ts_ls") -- TS (renamed from tsserver)
-			conf("pyright") -- examples; add settings only if needed
+			conf("ts_ls")
+			conf("pyright")
 			conf("gopls")
 			conf("rust_analyzer")
 
-			-- LSP-only keymaps via LspAttach (recommended on 0.11+)
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("UserLspKeymaps", { clear = true }),
 				callback = function(ev)
@@ -70,7 +64,6 @@ return {
 						vim.keymap.set(m, lhs, rhs, { buffer = ev.buf, silent = true, desc = desc })
 					end
 
-					-- Navigation powered by Snacks pickers (fallback to builtin if missing)
 					map("n", "gd", ok_snacks and function()
 						snacks.picker.lsp_definitions()
 					end or vim.lsp.buf.definition, "Goto Definition")
@@ -114,7 +107,6 @@ return {
 					map("n", "<leader>lh", vim.lsp.buf.hover, "Hover")
 					map({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action, "Code Action")
 					map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
-					-- 💡 Diagnostics (put here)
 					map("n", "<leader>le", vim.diagnostic.open_float, "Line diagnostics")
 					map("n", "[d", vim.diagnostic.goto_prev, "Prev diagnostic")
 					map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")

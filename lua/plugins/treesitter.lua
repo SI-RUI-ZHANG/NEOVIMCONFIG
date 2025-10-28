@@ -1,9 +1,8 @@
--- ~/.config/nvim/lua/plugins/treesitter.lua
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    lazy = false,              -- load at startup (recommended)
-    build = ":TSUpdate",       -- keep parsers in sync with plugin
+    lazy = false,
+    build = ":TSUpdate",
     opts = {
       ensure_installed = {
         "lua", "vim", "vimdoc",
@@ -14,12 +13,10 @@ return {
       },
       highlight = { enable = true },
       indent    = { enable = true },
-      -- safer on fresh macs without tree-sitter CLI:
-      auto_install = false,    -- set true only if you know you have the CLI
+      auto_install = false,
     },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
     end,
   },
 }
-

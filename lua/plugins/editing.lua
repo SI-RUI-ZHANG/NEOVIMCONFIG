@@ -1,6 +1,4 @@
--- ~/.config/nvim/lua/plugins/editing.lua
 return {
-  -- Which-key (key-hint popup)
   { "folke/which-key.nvim",
     event = "VeryLazy",
     opts = {},
@@ -13,25 +11,21 @@ return {
     },
   },
 
-  -- Comments
   {
     "numToStr/Comment.nvim",
     event = "VeryLazy",
     opts = {}, -- enables gc/gcc mappings
   },
 
-  -- Auto pairs
   {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
-    config = true, -- = require("nvim-autopairs").setup({})
+    config = true,
   },
 
-  -- Surroundings (ys, cs, ds, etc.)
   {
     "kylechui/nvim-surround",
     event = "VeryLazy",
     opts = {},
   },
 }
-

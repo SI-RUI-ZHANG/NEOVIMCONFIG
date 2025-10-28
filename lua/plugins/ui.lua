@@ -1,4 +1,3 @@
--- ~/.config/nvim/lua/plugins/ui.lua
 return {
   -- Statusline
   {
@@ -8,7 +7,6 @@ return {
     opts = {
       options = { theme = "auto", icons_enabled = true },
     },
-    -- cond = not vim.g.vscode, -- optional: skip in Cursor
   },
 
   -- Icons (shared dep)
