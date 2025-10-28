@@ -4,19 +4,16 @@ local map, opts = vim.keymap.set, { noremap = true, silent = true }
 map("n", "<Esc>", "<cmd>nohlsearch<CR>", opts)
 
 -- ----- Normal mode (shared and editor-agnostic) -----
--- Navigation/layout
-map("n", "H", "^", opts)
-map("n", "L", "$", opts)
-map("n", "<leader>j", "<C-d>zz", opts)
-map("n", "<leader>k", "<C-u>zz", opts)
-map("n", "<leader>-", "<C-w>s", opts)
-map("n", "<leader>|", "<C-w>v", opts)
-map("n", "<leader>c", "<C-w>c", opts)
-map("n", "<leader>C", "<C-w>o", opts)
-map("n", "<C-h>", "<C-w>h", opts)
-map("n", "<C-j>", "<C-w>j", opts)
-map("n", "<C-k>", "<C-w>k", opts)
-map("n", "<C-l>", "<C-w>l", opts)
+-- Window navigation with Shift-H J K L (Normal only)
+map("n", "H", "<C-w>h", opts)
+map("n", "J", "<C-w>j", opts)
+map("n", "K", "<C-w>k", opts)
+map("n", "L", "<C-w>l", opts)
+-- <leader>j/<leader>k are used for buffer navigation (bufferline)
+map("n", "-", "<C-w>s", opts)
+map("n", "\\", "<C-w>v", opts)
+-- <leader>c / <leader>C handled by bufferline (deterministic close)
+-- drop Ctrl-window navigation in favor of Shift-HJKL
 
 -- Editing
 map("n", "Y", "y$", opts)
@@ -31,9 +28,14 @@ map({ "n", "v" }, "gs", "%", opts) -- jump to matching pair
 -- ----- Visual mode -----
 map("v", "<leader>i", "g<c-a>", opts)
 map("v", "<leader>I", "g<c-x>", opts)
-map("v", "<leader>k", "<c-u>", opts)
-map("v", "<Leader>j", "<C-d>", opts)
+-- removed visual <leader>j/<leader>k to avoid conflict with buffer nav
 map("v", "<Tab>", ">gv", opts)
 map("v", "<S-Tab>", "<gv", opts)
-map("v", "H", "^", opts)
-map("v", "L", "$", opts)
+-- Some terminals send <Esc>[Z for <S-Tab>; add fallback
+map({ "n" }, "<Esc>[Z", "<<", opts)
+map({ "v" }, "<Esc>[Z", "<gv", opts)
+-- Remove Visual H/L to keep Shift-HJKL Normal-only
+
+-- Begin/End of line on gh/gl (Normal + Visual)
+map({ "n", "v" }, "gh", "^", opts)
+map({ "n", "v" }, "gl", "$", opts)

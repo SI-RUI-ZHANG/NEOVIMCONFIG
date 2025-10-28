@@ -111,8 +111,8 @@ return {
 						vim.diagnostic.setloclist(0, { open = true })
 					end, "Buffer Diagnostics")
 
-					map("n", "K", vim.lsp.buf.hover, "Hover")
-					map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code Action")
+					map("n", "<leader>lh", vim.lsp.buf.hover, "Hover")
+					map({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action, "Code Action")
 					map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
 					-- 💡 Diagnostics (put here)
 					map("n", "<leader>le", vim.diagnostic.open_float, "Line diagnostics")

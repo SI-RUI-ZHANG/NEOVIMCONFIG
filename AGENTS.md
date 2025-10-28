@@ -33,3 +33,18 @@
 ## Security & Configuration Tips
 - Requirements: Neovim 0.11+, Git, and language toolchains via Mason. For blink.cmp, install Rust nightly (`rustup toolchain install nightly`).
 - Avoid committing secrets. Do not hardcode absolute local paths.
+
+## Documentation-First Changes (Required)
+- Do not ship changes based on guesswork. Back every behavior change with sources.
+- Source-of-truth order:
+  1) Official docs and plugin code (APIs, action names, documented key tables).
+  2) Maintainer posts/issues/discussions (GitHub Discussions/Issues in the plugin repo).
+  3) Community notes with code samples (blogs, gists, reputable configs). Include dates/versions if relevant.
+- Cross-reference at least 2 sources (ideally official docs + one community thread) in the commit/PR description for non-trivial remaps or behavior changes.
+- Match versions: confirm the documented API/action names against the exact plugin version pinned in `lazy-lock.json` before using them.
+- Prefer official configuration entry points over ad-hoc hooks (e.g., for Snacks Explorer, set keys under `opts.picker.sources.explorer.win.list.keys` instead of autocmd overrides).
+- If API names differ across versions, implement the minimal, verified subset first. Defer additional mappings until names are confirmed for the pinned version.
+- Always update local docs when behavior changes:
+  - `KEYMAPS.md` for global/editor keymaps
+  - `EXPLORER_KEYMAPS.md` for Explorer-specific actions
+- Validate after changes with concrete steps (open explorer, test Esc/splits/preview, etc.) and record any known caveats.

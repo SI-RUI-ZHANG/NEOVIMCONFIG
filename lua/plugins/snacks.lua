@@ -21,7 +21,32 @@ return {
 			enabled = true,
 			timeout = 3000,
 		},
-		picker = { enabled = true },
+		picker = {
+			enabled = true,
+			sources = {
+				explorer = {
+					-- keep explorer open unless explicitly toggled; don't auto-close on jumps
+					jump = { close = false },
+					auto_close = false,
+					win = {
+						list = {
+                    keys = {
+                        -- Esc focuses previous window (do not close explorer)
+                        ["<esc>"] = function()
+                            vim.schedule(function()
+                                vim.cmd("wincmd p")
+                            end)
+                        end,
+                        -- Basic, stable actions
+                        ["-"] = "edit_split",
+                        ["\\"] = "edit_vsplit",
+                        -- Let Snacks defaults handle <CR>/o on files vs dirs and preview behavior
+                    },
+						},
+					},
+				},
+			},
+		},
 		quickfile = { enabled = true },
 		scope = { enabled = true },
 		scroll = { enabled = true },
@@ -343,7 +368,7 @@ return {
 			desc = "Delete Buffer",
 		},
 		{
-			"<leader>cR",
+			"<leader>rN",
 			function()
 				Snacks.rename.rename_file()
 			end,
@@ -386,6 +411,13 @@ return {
 			desc = "which_key_ignore",
 		},
 		{
+			"<leader>t",
+			function()
+				Snacks.terminal()
+			end,
+			desc = "Toggle Terminal",
+		},
+		{
 			")",
 			function()
 				Snacks.words.jump(vim.v.count1)
@@ -420,7 +452,7 @@ return {
 			end,
 		},
 	},
-	init = function()
+		init = function()
 		vim.api.nvim_create_autocmd("User", {
 			pattern = "VeryLazy",
 			callback = function()
@@ -457,6 +489,22 @@ return {
 				Snacks.toggle.inlay_hints():map("<leader>uh")
 				Snacks.toggle.indent():map("<leader>ug")
 				Snacks.toggle.dim():map("<leader>uD")
+
+				-- Explorer keys now configured in opts.explorer.win.list.keys
+
+        -- Terminal: <Esc> exits to Normal mode (no window jump); toggle with <leader>t
+        local term_grp = vim.api.nvim_create_augroup("SnacksTerminalEsc", { clear = true })
+        vim.api.nvim_create_autocmd("TermOpen", {
+            group = term_grp,
+            pattern = "*",
+            callback = function(args)
+                vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], {
+                    buffer = args.buf,
+                    silent = true,
+                    desc = "Terminal: exit to Normal mode",
+                })
+            end,
+        })
 			end,
 		})
 	end,
