@@ -16,9 +16,9 @@ return {
 			},
 		},
 		keys = {
-			-- Navigate buffers
-			{ "<leader>k", "<cmd>BufferLineCycleNext<CR>", desc = "Next buffer" },
-			{ "<leader>j", "<cmd>BufferLineCyclePrev<CR>", desc = "Prev buffer" },
+			-- Navigate buffers (J next, K prev)
+			{ "J", "<cmd>BufferLineCycleNext<CR>", desc = "Next buffer" },
+			{ "K", "<cmd>BufferLineCyclePrev<CR>", desc = "Prev buffer" },
 
 			-- Reorder buffers
 			{ "<leader>K", "<cmd>BufferLineMoveNext<CR>", desc = "Move buffer right" },

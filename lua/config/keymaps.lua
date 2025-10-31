@@ -9,17 +9,15 @@ map("n", "<Esc>", "<cmd>nohlsearch<CR>", "Clear search highlight")
 -- ----- Normal mode (shared and editor-agnostic) -----
 map("n", "H", "^", "Jump to start of line")
 map("n", "L", "$", "Jump to end of line")
-map("n", "J", "15j", "Move down 15 lines")
-map("n", "K", "10k", "Move up 15 lines")
 
--- Window navigation with Shift-H J K L (Normal only)
-map("n", "<leader>h", "<C-w>h", "Focus window left")
-map("n", "<leader>j", "<C-w>j", "Focus window down")
-map("n", "<leader>k", "<C-w>k", "Focus window up")
-map("n", "<leader>l", "<C-w>l", "Focus window right")
+-- Window navigation with Ctrl-h/j/k/l (Normal only)
+map("n", "<C-h>", "<C-w>h", "Focus window left")
+map("n", "<C-j>", "<C-w>j", "Focus window down")
+map("n", "<C-k>", "<C-w>k", "Focus window up")
+map("n", "<C-l>", "<C-w>l", "Focus window right")
 
 -- Split windows
--- <leader>j/<leader>k are used for buffer navigation (bufferline)
+-- J/K are used for buffer navigation (bufferline)
 map("n", "-", "<C-w>s", "Split window below")
 map("n", "\\", "<C-w>v", "Split window right")
 
@@ -37,6 +35,9 @@ map("n", "<leader>a", "A", "Append at end of line")
 map("n", "<leader>i", "I", "Insert at line start")
 map({ "n", "v" }, "<Tab>", ">>", "Indent right")
 map({ "n", "v" }, "<S-Tab>", "<<", "Indent left")
+-- Fast in-file jump (15 lines) on <leader>j/k
+map("n", "<leader>j", "15j", "Move down 15 lines")
+map("n", "<leader>k", "15k", "Move up 15 lines")
 
 -- Word search motions
 map({ "n", "v" }, "gs", "%", "Jump to matching pair")
