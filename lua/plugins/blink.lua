@@ -24,9 +24,9 @@ return {
 		-- C-e: Hide menu
 		-- C-k: Toggle signature help (if signature.enabled = true)
 		--
-    -- See :h blink-cmp-config-keymap for defining your own keymap
-    -- Use VS Code-like behavior: Tab accepts completion
-    keymap = { preset = "super-tab" },
+		-- See :h blink-cmp-config-keymap for defining your own keymap
+		-- Use VS Code-like behavior: Tab accepts completion
+		keymap = { preset = "enter" },
 
 		appearance = {
 			-- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'

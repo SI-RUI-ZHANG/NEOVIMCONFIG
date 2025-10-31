@@ -5,10 +5,9 @@ return {
 		event = "InsertEnter",
 		init = function()
 			-- Don't let Copilot grab <Tab> (avoids conflicts with nvim-cmp/blink)
-			vim.g.copilot_no_tab_map = true
 			vim.keymap.set(
 				"i",
-				"<C-l>",
+				"<Tab>",
 				'copilot#Accept("<CR>")',
 				{ expr = true, replace_keycodes = false, desc = "Copilot Accept" }
 			)

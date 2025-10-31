@@ -7,14 +7,29 @@ end
 map("n", "<Esc>", "<cmd>nohlsearch<CR>", "Clear search highlight")
 
 -- ----- Normal mode (shared and editor-agnostic) -----
+map("n", "H", "^", "Jump to start of line")
+map("n", "L", "$", "Jump to end of line")
+map("n", "J", "15j", "Move down 15 lines")
+map("n", "K", "10k", "Move up 15 lines")
+
 -- Window navigation with Shift-H J K L (Normal only)
-map("n", "H", "<C-w>h", "Focus window left")
-map("n", "J", "<C-w>j", "Focus window down")
-map("n", "K", "<C-w>k", "Focus window up")
-map("n", "L", "<C-w>l", "Focus window right")
+map("n", "<leader>h", "<C-w>h", "Focus window left")
+map("n", "<leader>j", "<C-w>j", "Focus window down")
+map("n", "<leader>k", "<C-w>k", "Focus window up")
+map("n", "<leader>l", "<C-w>l", "Focus window right")
+
+-- Split windows
 -- <leader>j/<leader>k are used for buffer navigation (bufferline)
 map("n", "-", "<C-w>s", "Split window below")
 map("n", "\\", "<C-w>v", "Split window right")
+
+-- Window layout
+-- Make window wider/narrower
+map("n", "_", "<cmd>vertical resize -2<cr>", "make window narrower")
+map("n", "+", "<cmd>vertical resize +2<cr>", "make window wider")
+-- Make window taller/shorter
+map("n", "<S-Up>", "<cmd>resize +2<CR>", "Make window taller")
+map("n", "<S-Down>", "<cmd>resize -2<CR>", "Make window shorter")
 
 -- Editing
 map("n", "Y", "y$", "Yank to end of line")
@@ -32,7 +47,6 @@ map("v", "<leader>I", "g<c-x>", "Decrement selection numbers")
 -- removed visual <leader>j/<leader>k to avoid conflict with buffer nav
 map("v", "<Tab>", ">gv", "Indent selection right")
 map("v", "<S-Tab>", "<gv", "Indent selection left")
--- Remove Visual H/L to keep Shift-HJKL Normal-only
 
 -- Begin/End of line on gh/gl (Normal + Visual)
 map({ "n", "v" }, "gh", "^", "Jump to start of line")
