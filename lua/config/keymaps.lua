@@ -40,7 +40,7 @@ map("n", "<leader>j", "15j", "Move down 15 lines")
 map("n", "<leader>k", "15k", "Move up 15 lines")
 
 -- Word search motions
-map({ "n", "v" }, "gs", "%", "Jump to matching pair")
+map({ "n", "v" }, "s", "%", "Jump to matching pair")
 
 -- ----- Visual mode -----
 map("v", "<leader>i", "g<c-a>", "Increment selection numbers")
